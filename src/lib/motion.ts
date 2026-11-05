@@ -44,3 +44,34 @@ export function useReveal(dependency: unknown) {
     return () => observer.disconnect();
   }, [dependency]);
 }
+
+/**
+ * For horizontally scrolling rows (tabs, kanban): marks which edges hide more content so CSS can fade them,
+ * and keeps the selected item in view when `active` changes. Returns a ref callback.
+ */
+export function useScrollHint<T extends HTMLElement>(active?: unknown) {
+  const [el, setEl] = useState<T | null>(null);
+  useEffect(() => {
+    if (!el) return;
+    el.dataset.scrollHint = '';
+    const update = () => {
+      const max = el.scrollWidth - el.clientWidth;
+      el.toggleAttribute('data-more-start', el.scrollLeft > 2);
+      el.toggleAttribute('data-more-end', max - el.scrollLeft > 2);
+    };
+    update();
+    el.addEventListener('scroll', update, { passive: true });
+    const ro = typeof ResizeObserver === 'function' ? new ResizeObserver(update) : null;
+    ro?.observe(el);
+    return () => { el.removeEventListener('scroll', update); ro?.disconnect(); };
+  }, [el]);
+  useEffect(() => {
+    if (!el) return;
+    const current = el.querySelector<HTMLElement>('[aria-pressed="true"],[aria-selected="true"]');
+    if (!current || el.scrollWidth <= el.clientWidth) return;
+    const er = el.getBoundingClientRect(), cr = current.getBoundingClientRect();
+    const left = el.scrollLeft + (cr.left - er.left) - (el.clientWidth - cr.width) / 2;
+    el.scrollTo({ left: Math.max(0, left), behavior: reducedMotion() ? 'auto' : 'smooth' });
+  }, [el, active]);
+  return setEl;
+}
