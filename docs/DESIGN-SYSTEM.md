@@ -79,3 +79,11 @@ Lapisan `src/styles/motion.css` diimpor paling akhir dan memuat seluruh gerak se
 - **Reduced motion:** `prefers-reduced-motion: reduce` menampilkan keadaan akhir tanpa gerak (termasuk count-up dan reveal).
 - **Ukuran:** teks minimal 12px; target sentuh di HP minimal 44px; kalender HP memakai titik tenggat dan label jumlah pada tombol tanggal.
 - **Pengujian:** audit axe dijalankan setelah animasi berhingga selesai (`tests/browser/settle.ts`), karena warna di tengah fade bukan kontras akhir yang dilihat pengguna.
+
+### Putaran 2: navigasi dan tab
+
+- **Pencarian cepat (⌘K / Ctrl+K):** palette ala Spotlight (`src/components/CommandPalette.tsx`) untuk membuka tugas (judul atau nomor BYLT), berpindah halaman, mencatat tugas, mengganti tema, dan membuka panduan. Dapat dioperasikan dengan ↑/↓, Enter, dan Esc. Di HP tersedia tombol cari pada topbar.
+- **Tab dan baris yang bisa digeser:** preset pekerjaan, tab detail tugas, dan Kanban memberi bayangan di tepi yang masih menyimpan konten (`useScrollHint`), dan tab aktif digeser ke tengah. Garis bawah tab aktif tumbuh dari tengah.
+- **Kanban:** lima kolom muat pada layar laptop 1366px; di layar sempit kolom menempel (scroll-snap) saat digeser.
+- **Tabel pekerjaan:** nama Bagian hanya tampil bila sudah ditetapkan.
+- **Mode contoh:** memuat bagian, kontak, dan notifikasi contoh agar seluruh halaman dapat ditinjau.

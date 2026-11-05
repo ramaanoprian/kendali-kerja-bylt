@@ -68,3 +68,50 @@ test('calendar days align and stay usable on phone',async({page})=>{
  expect(new Set(tops).size).toBe(1);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
+
+test('command palette finds tasks, pages and actions from the keyboard',async({page})=>{
+ await page.setViewportSize({width:1366,height:900});
+ await page.goto('/?preview=1');
+ await expect(page.getByRole('heading',{name:/Ringkasan pekerjaan/})).toBeVisible();
+ await page.keyboard.press('Control+k');
+ const input=page.getByRole('combobox',{name:'Cari pekerjaan, halaman, atau tindakan'});
+ await expect(input).toBeFocused();
+ expect(await axe(page)).toEqual([]);
+ await input.fill('rekap');
+ await expect(page.getByRole('option',{name:/Penyusunan rekap pekerjaan bulanan/})).toHaveAttribute('aria-selected','true');
+ await page.keyboard.press('Enter');
+ await expect(page.getByRole('dialog').getByText('Penyusunan rekap pekerjaan bulanan',{exact:true}).first()).toBeVisible();
+ await page.keyboard.press('Escape');
+ await page.keyboard.press('Control+k');
+ await input.fill('agenda');
+ await page.keyboard.press('Enter');
+ await expect(page.getByRole('heading',{name:'Agenda pekerjaan'})).toBeVisible();
+ await page.keyboard.press('Control+k');
+ await input.fill('zzz tidak ada');
+ await expect(page.getByText('Tidak ada hasil untuk “zzz tidak ada”.')).toBeVisible();
+ await page.keyboard.press('Escape');
+ await expect(page.locator('.command-palette[open]')).toHaveCount(0);
+});
+
+test('phone search button opens the palette; scrolling tabs show an edge hint',async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ await page.goto('/?preview=1');
+ await page.getByRole('button',{name:'Pencarian cepat'}).click();
+ await expect(page.getByRole('combobox',{name:'Cari pekerjaan, halaman, atau tindakan'})).toBeFocused();
+ await page.keyboard.press('Escape');
+ await page.locator('.mobile-tabbar').getByRole('button',{name:'Tugas',exact:true}).click();
+ await expect(page.locator('.presets')).toHaveAttribute('data-more-end','');
+ await page.locator('.presets').evaluate(e=>{e.style.scrollBehavior='auto';e.scrollLeft=e.scrollWidth;});
+ await expect(page.locator('.presets')).not.toHaveAttribute('data-more-end','');
+ await expect(page.locator('.presets')).toHaveAttribute('data-more-start','');
+});
+
+test('kanban fits five columns on a laptop screen and rows skip empty department',async({page})=>{
+ await page.setViewportSize({width:1366,height:900});
+ await page.goto('/?preview=1');
+ await page.locator('.main-nav').getByRole('button',{name:/Pekerjaan/}).click();
+ await expect(page.getByText('Bagian belum ditetapkan')).toHaveCount(0);
+ await expect(page.getByText('Bagian contoh 1',{exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'Tampilan Kanban'}).click();
+ expect(await page.locator('.kanban').evaluate(e=>e.scrollWidth<=e.clientWidth)).toBe(true);
+});
