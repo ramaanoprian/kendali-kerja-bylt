@@ -30,7 +30,7 @@ export function WorkspaceProvider({children}:{children:ReactNode}){
  const membership=members?.[0] as Membership|undefined;
  if(!membership){setData(blankData());setOrgId('');setRole(null);setLoading(false);return;}
  const org=membership.organization_id;
- const tableMap={tasks:'tasks',profiles:'profiles',memberships:'memberships',teams:'teams',departments:'departments',teamMembers:'team_members',supporters:'task_members',subtasks:'subtasks',comments:'comments',attachments:'attachments',history:'history',notifications:'notifications',contacts:'contacts',reports:'reports',invitations:'invitations'};
+ const tableMap={tasks:'tasks',profiles:'profiles',memberships:'memberships',teams:'teams',departments:'departments',teamMembers:'team_members',supporters:'task_members',subtasks:'subtasks',comments:'comments',attachments:'attachments',history:'history',notifications:'notifications',contacts:'contacts',reports:'reports',invitations:'invitations',recurrences:'recurrences'};
  const entries=await Promise.all(Object.entries(tableMap).map(async([key,table])=>[key,await getAll(table,table==='profiles'?undefined:org)]));
  if(gen!==generation.current)return;setData(Object.fromEntries(entries) as unknown as WorkspaceData);setOrgId(org);setRole(membership.role);setError('');
  }catch(e){if(gen===generation.current)setError(errorMessage(e));}finally{if(gen===generation.current)setLoading(false);}

@@ -1,0 +1,238 @@
+/* Motion & polish layer (Stripe/Apple inspired). Imported last.
+   Rules: animate only transform/opacity where possible, keep durations short,
+   and let prefers-reduced-motion switch everything to the final state. */
+:root{
+ --ease-out:cubic-bezier(.16,1,.3,1);
+ --ease-spring:cubic-bezier(.22,1.25,.36,1);
+ --ease-in-out:cubic-bezier(.65,0,.35,1);
+ --dur-1:140ms;--dur-2:240ms;--dur-3:420ms;--dur-4:720ms;
+ --radius-sm:6px;--radius:8px;--radius-lg:14px;
+ --shadow-sm:0 1px 2px rgb(16 24 40/.05),0 1px 3px rgb(16 24 40/.06);
+ --shadow-md:0 2px 4px -2px rgb(16 24 40/.06),0 10px 20px -6px rgb(50 50 93/.14);
+ --shadow-lg:0 14px 28px -8px rgb(50 50 93/.18),0 34px 70px -18px rgb(16 24 40/.22);
+ --accent-gradient:linear-gradient(100deg,#5338ef,#8a5cf6 45%,#e0559b);
+}
+:root[data-theme=dark]{
+ --shadow-sm:0 1px 2px rgb(0 0 0/.3);--shadow-md:0 10px 24px -8px rgb(0 0 0/.55);--shadow-lg:0 30px 70px -20px rgb(0 0 0/.7);
+ --accent-gradient:linear-gradient(100deg,#9d8bff,#c39bff 45%,#ff9ccc);
+}
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+::selection{background:color-mix(in srgb,var(--blue) 24%,transparent)}
+.count-up,.stat-value,.completion-summary strong,.workload-number{font-variant-numeric:tabular-nums}
+/* CountUp sits where a bare number used to be; it must not pick up the label styles of sibling spans. */
+.stat-value>.count-up,.completion-summary>strong>.count-up{display:inline;font-size:inherit;font-weight:inherit;letter-spacing:inherit;line-height:inherit;color:inherit;margin:0}
+
+/* ---------- Keyframes ---------- */
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes grow-x{from{transform:scaleX(0)}}
+@keyframes grow-y{from{transform:scaleY(0)}}
+@keyframes shimmer{from{background-position:100% 0}to{background-position:-100% 0}}
+@keyframes drift{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(9%,7%,0) scale(1.12)}100%{transform:translate3d(-7%,11%,0) scale(.94)}}
+@keyframes float{from{transform:rotateX(7deg) rotateY(-12deg) translateY(0)}to{transform:rotateX(5deg) rotateY(-9deg) translateY(-10px)}}
+@keyframes bob{from{transform:translateY(0)}to{transform:translateY(-6px)}}
+@keyframes dialog-in{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes sheet-in{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+@keyframes panel-in{from{transform:translateX(36px);opacity:0}to{transform:none;opacity:1}}
+@keyframes toast-rise{from{opacity:0;transform:translate(-50%,18px) scale(.96)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes toast-timer{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+@keyframes sync-slide{from{transform:translateX(-100%)}to{transform:translateX(260%)}}
+@keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.06)}100%{transform:none}}
+@keyframes breathe{0%,100%{opacity:1}50%{opacity:.45}}
+
+/* ---------- Page & list entrance ---------- */
+.page-view{animation:fade var(--dur-2) ease both}
+.page-view>*{animation:rise var(--dur-4) var(--ease-out) both}
+.page-view>*:nth-child(2){animation-delay:50ms}.page-view>*:nth-child(3){animation-delay:100ms}.page-view>*:nth-child(4){animation-delay:150ms}.page-view>*:nth-child(5){animation-delay:200ms}.page-view>*:nth-child(n+6){animation-delay:240ms}
+:is(.attention-row,.compact-task,.timeline-item,.agenda-item,.kanban-card,.mobile-task,.member-row,.recurrence-row,.contact-card,.report-card,.notification-item,.task-table tbody tr){animation:rise var(--dur-3) var(--ease-out) both}
+:is(.attention-row,.compact-task,.timeline-item,.agenda-item,.kanban-card,.mobile-task,.member-row,.recurrence-row,.contact-card,.report-card,.notification-item,.task-table tbody tr):nth-child(2){animation-delay:35ms}
+:is(.attention-row,.compact-task,.timeline-item,.agenda-item,.kanban-card,.mobile-task,.member-row,.recurrence-row,.contact-card,.report-card,.notification-item,.task-table tbody tr):nth-child(3){animation-delay:70ms}
+:is(.attention-row,.compact-task,.timeline-item,.agenda-item,.kanban-card,.mobile-task,.member-row,.recurrence-row,.contact-card,.report-card,.notification-item,.task-table tbody tr):nth-child(4){animation-delay:105ms}
+:is(.attention-row,.compact-task,.timeline-item,.agenda-item,.kanban-card,.mobile-task,.member-row,.recurrence-row,.contact-card,.report-card,.notification-item,.task-table tbody tr):nth-child(n+5){animation-delay:140ms}
+
+/* Scroll reveal: hidden state exists only after JS opts in (html.reveal-ready). */
+html.reveal-ready [data-reveal]{opacity:0;transform:translateY(22px);transition:opacity 900ms var(--ease-out) var(--reveal-delay,0ms),transform 900ms var(--ease-out) var(--reveal-delay,0ms)}
+html.reveal-ready [data-reveal].is-visible{opacity:1;transform:none}
+
+/* ---------- Data that fills in ---------- */
+.progress-track>span,.completion-meter>span,.team-track>span{transform-origin:left center;animation:grow-x 1000ms var(--ease-out) both;transition:width var(--dur-3) var(--ease-out)}
+.workload-track>span{transform-origin:center bottom;animation:grow-y 900ms var(--ease-out) both;transition:height var(--dur-3) var(--ease-out)}
+.workload-column:nth-child(2) .workload-track>span{animation-delay:60ms}.workload-column:nth-child(3) .workload-track>span{animation-delay:120ms}.workload-column:nth-child(4) .workload-track>span{animation-delay:180ms}.workload-column:nth-child(5) .workload-track>span{animation-delay:240ms}
+.workload-column .workload-track>span{transition:height var(--dur-3) var(--ease-out),filter var(--dur-2)}
+.workload-column:hover .workload-track>span{filter:brightness(1.08) saturate(1.1)}
+
+/* ---------- Buttons & micro-interactions ---------- */
+.button{border-radius:var(--radius-sm);transition:background-color var(--dur-1),color var(--dur-1),border-color var(--dur-1),box-shadow var(--dur-2) var(--ease-out),transform var(--dur-2) var(--ease-out)}
+.button:hover:not(:disabled){transform:translateY(-1px)}
+.button:active:not(:disabled){transform:translateY(0) scale(.97);transition-duration:70ms}
+.button.primary{background:var(--blue);box-shadow:0 1px 2px rgb(50 50 93/.18),inset 0 1px 0 rgb(255 255 255/.14)}
+.button.primary:hover:not(:disabled){box-shadow:0 6px 16px -4px color-mix(in srgb,var(--blue) 55%,transparent),inset 0 1px 0 rgb(255 255 255/.14)}
+.button.secondary:hover:not(:disabled){box-shadow:var(--shadow-sm)}
+:is(.button,.reference-preview,.coordination-note button,.demo-banner button,.reference-header a,.panel-heading .button,.attention-summary-links button) svg:is(.lucide-arrow-right,.lucide-arrow-up-right,.lucide-chevron-right){transition:transform var(--dur-2) var(--ease-out)}
+:is(.button,.reference-preview,.coordination-note button,.demo-banner button,.reference-header a,.panel-heading .button,.attention-summary-links button):hover svg.lucide-arrow-right{transform:translateX(3px)}
+:is(.button,.reference-preview,.reference-header a):hover svg.lucide-arrow-up-right{transform:translate(2px,-2px)}
+.attention-row svg.lucide-chevron-right{transition:transform var(--dur-2) var(--ease-out)}
+.attention-row:hover svg.lucide-chevron-right{transform:translateX(3px)}
+.main-nav button,.sidebar-bottom-nav button{transition:color var(--dur-1),background-color var(--dur-1),box-shadow var(--dur-2) var(--ease-out)}
+.main-nav button svg{transition:transform var(--dur-2) var(--ease-spring)}
+.main-nav button:hover svg{transform:scale(1.08)}
+.mobile-tabbar button svg{transition:transform var(--dur-3) var(--ease-spring)}
+.mobile-tabbar button.active svg{transform:translateY(-1px) scale(1.08)}
+
+/* Lift on hover for cards that open something. */
+.kanban-card,.report-card,.contact-card,.named-list>div,.data-option{transition:transform var(--dur-2) var(--ease-out),box-shadow var(--dur-2) var(--ease-out),border-color var(--dur-1)}
+.kanban-card:hover,.report-card:hover,.contact-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.stat-card{transition:background-color var(--dur-2)}
+.stat-card .stat-value{transition:color var(--dur-2)}
+.stat-card:hover .stat-value{color:var(--blue)}
+.attention-row,.compact-task,.timeline-item,.agenda-item,.team-load{transition:background-color var(--dur-1)}
+
+/* ---------- Topbar: Apple-style glass, sticky, with save progress ---------- */
+.topbar{position:sticky;top:0;z-index:25;background:color-mix(in srgb,var(--surface) 76%,transparent);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px)}
+@supports not (backdrop-filter:blur(10px)){.topbar{background:var(--surface)}}
+.sync-bar{position:absolute;left:0;right:0;bottom:-1px;height:2px;overflow:hidden;opacity:0;transition:opacity var(--dur-2);pointer-events:none}
+.sync-bar.active{opacity:1}
+.sync-bar:before{content:'';position:absolute;inset:0;width:40%;background:var(--accent-gradient);animation:sync-slide 1.1s var(--ease-in-out) infinite}
+.cloud-status{transition:color var(--dur-2)}
+.cloud-status.saving svg{animation:breathe 1s ease-in-out infinite}
+.cloud-status.saved svg{animation:pop var(--dur-3) var(--ease-spring)}
+.cloud-status.failed{color:var(--red)}
+
+.collapse-button,.theme-shortcut,.notification-button,.logout-button{min-width:40px;min-height:40px}
+
+/* ---------- Dialogs, toast, skeleton ---------- */
+.dialog{box-shadow:var(--shadow-lg)}
+.dialog[open]{animation:dialog-in var(--dur-3) var(--ease-spring) both}
+.dialog.side-panel[open]{animation:panel-in var(--dur-3) var(--ease-out) both}
+.dialog[open]::backdrop{animation:fade var(--dur-2) ease both;background:rgb(16 24 44/.32);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.toast{animation:toast-rise var(--dur-3) var(--ease-spring) both;overflow:hidden}
+.toast-timer{position:absolute;left:0;bottom:0;height:2px;width:100%;background:currentColor;opacity:.3;transform-origin:left center;animation:toast-timer var(--toast-life,6s) linear both}
+.skeleton-page>div,.skeleton-page .skeleton-cards>div{background:linear-gradient(90deg,var(--surface-alt) 25%,var(--line) 50%,var(--surface-alt) 75%);background-size:200% 100%;animation:shimmer 1.3s linear infinite;border-radius:var(--radius)}
+.skeleton-page>.skeleton-cards{background:none;animation:none}
+.skeleton-page>.skeleton-line{height:16px;width:22%;margin-bottom:14px}
+.skeleton-page>.skeleton-line.wide{height:36px;width:48%}
+.skeleton-page>.skeleton-block{height:420px;margin-top:25px}
+
+/* ---------- Landing hero (Stripe-like moving gradient + product preview) ---------- */
+.reference-hero{position:relative;isolation:isolate;overflow:hidden;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:56px;align-items:center;padding:112px 64px 104px;min-height:0}
+.hero-aurora{position:absolute;inset:-35% -15% 0 20%;z-index:-1;overflow:hidden;pointer-events:none;-webkit-mask-image:linear-gradient(100deg,transparent 8%,#000 52%);mask-image:linear-gradient(100deg,transparent 8%,#000 52%);opacity:.55}
+.hero-aurora span{position:absolute;width:58%;aspect-ratio:1;border-radius:50%;filter:blur(72px);will-change:transform;animation:drift 18s var(--ease-in-out) infinite alternate}
+.hero-aurora span:nth-child(1){background:#7c5cff;left:0;top:8%}
+.hero-aurora span:nth-child(2){background:#ff8cc0;left:36%;top:-6%;animation-duration:22s;animation-delay:-7s}
+.hero-aurora span:nth-child(3){background:#5ec8ff;left:58%;top:26%;animation-duration:26s;animation-delay:-13s}
+[data-theme=dark] .hero-aurora{opacity:.32}
+.hero-in{animation:rise 1000ms var(--ease-out) both;animation-delay:var(--d,0ms)}
+.reference-hero h1{font-size:64px;line-height:1.06;letter-spacing:-.035em;font-weight:600;max-width:640px;color:var(--text)}
+.reference-hero h1 .hero-gradient-text,[data-theme=dark] .reference-hero h1 .hero-gradient-text{background:var(--accent-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.hero-lead{font-size:20px;line-height:1.55;color:var(--muted);max-width:520px;margin-top:24px;letter-spacing:-.01em}
+.reference-actions{margin-top:36px}
+.reference-actions .primary{border-radius:999px;padding:12px 22px;min-height:46px;font-size:14px}
+.reference-preview{font-size:14px;font-weight:550;min-height:46px}
+.hero-preview{position:relative;perspective:1400px}
+.hero-window{position:relative;background:color-mix(in srgb,var(--surface) 84%,transparent);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);border:1px solid color-mix(in srgb,var(--line-strong) 55%,transparent);border-radius:16px;box-shadow:var(--shadow-lg);padding-bottom:8px;transform-style:preserve-3d;animation:float 7s ease-in-out infinite alternate;transform:rotateX(7deg) rotateY(-12deg)}
+.hero-window-bar{display:flex;align-items:center;gap:6px;padding:13px 16px;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
+.hero-window-bar i{width:10px;height:10px;border-radius:50%;background:var(--line-strong)}
+.hero-window-bar i:nth-child(1){background:#ff6159}.hero-window-bar i:nth-child(2){background:#ffbd2e}.hero-window-bar i:nth-child(3){background:#28c941}
+.hero-window-bar span{margin-left:10px}
+.hero-row{display:grid;grid-template-columns:10px minmax(0,1fr) auto;align-items:center;gap:14px;padding:18px 18px;border-bottom:1px solid var(--line);animation:rise 800ms var(--ease-out) both;animation-delay:calc(520ms + var(--i)*130ms)}
+.hero-row:last-child{border-bottom:0}
+.hero-row strong{display:block;font-size:14px;font-weight:550;margin-bottom:9px;color:var(--text)}
+.hero-kind{width:8px;height:8px;border-radius:50%;background:var(--blue)}
+.hero-kind.waiting{background:#d48a1f}.hero-kind.done{background:#2f9e6e}
+.hero-bar{display:block;height:5px;border-radius:5px;background:var(--line);overflow:hidden}
+.hero-bar i{display:block;height:100%;width:calc(var(--p)*100%);background:var(--accent-gradient);border-radius:inherit;transform-origin:left center;animation:grow-x 1300ms var(--ease-out) both;animation-delay:calc(760ms + var(--i)*150ms)}
+.hero-float{position:absolute;right:-12px;bottom:-24px;display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-md);font-size:13px;font-weight:600;color:var(--green);animation:rise 700ms 1.2s var(--ease-out) both,bob 4.5s 2s ease-in-out infinite alternate}
+.reference-workflow>div{transition:background-color var(--dur-2)}
+.reference-workflow>div:hover{background:var(--surface-alt)}
+.reference-workflow>div>span{display:inline-grid;place-items:center;min-width:30px;height:24px;border-radius:999px;background:var(--blue-soft);color:var(--blue);font-weight:600;padding:0 8px}
+
+/* ---------- Login form ---------- */
+.password-field>input{padding-right:50px!important}
+.password-toggle{position:absolute;right:1px;top:50%;transform:translateY(-50%);width:44px;height:44px;display:grid;place-items:center;color:var(--muted);border-radius:var(--radius-sm);transition:color var(--dur-1),background-color var(--dur-1)}
+.password-toggle:hover{color:var(--text);background:var(--surface-alt)}
+.password-toggle:focus-visible{outline:2px solid var(--blue);outline-offset:-4px}
+.reset-link,.text-button{min-height:44px}
+.input-with-icon>input{transition:border-color var(--dur-1),box-shadow var(--dur-2) var(--ease-out)}
+.input-with-icon>input:focus{box-shadow:var(--focus-ring)}
+
+/* ---------- Agenda: aligned day numbers ---------- */
+.calendar-day{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:4px;transition:background-color var(--dur-1)}
+.calendar-day>div{width:100%;min-width:0;display:flex;flex-direction:column;gap:3px}
+.calendar-event{max-width:100%;margin-top:0}
+.calendar-day>span{transition:background-color var(--dur-2),color var(--dur-2)}
+.calendar-day.today>span{background:var(--blue);color:#fff}
+[data-theme=dark] .calendar-day.today>span{color:#16112f}
+
+/* ---------- Activity ---------- */
+.activity-filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.activity-search{flex:1 1 280px;display:flex;align-items:center;gap:8px;border:1px solid var(--line-strong);border-radius:var(--radius-sm);padding:0 12px;min-height:44px;background:var(--surface);color:var(--muted);transition:border-color var(--dur-1),box-shadow var(--dur-2)}
+.activity-search:focus-within{border-color:var(--blue);box-shadow:var(--focus-ring)}
+.activity-search input{flex:1;min-width:0;border:0!important;background:none!important;outline:none;min-height:42px;padding:0!important;color:var(--text);box-shadow:none!important}
+.activity-filters select{flex:0 1 210px;min-height:44px}
+.change-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.change-list>span{font-size:12px;line-height:1.5;padding:2px 9px;border-radius:999px;background:var(--surface-alt);border:1px solid var(--line);color:var(--muted)}
+.load-more{display:flex;justify-content:center;padding:22px 0 6px}
+.timeline-item:disabled{cursor:default;opacity:1}
+
+/* ---------- Recurring work ---------- */
+.recurrence-list{display:flex;flex-direction:column;border-top:1px solid var(--line);margin:20px 0}
+.recurrence-row{display:grid;grid-template-columns:40px minmax(0,1fr) auto;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+.recurrence-row>div{display:flex;flex-direction:column;gap:3px;min-width:0}
+.recurrence-row strong{font-weight:550}
+.recurrence-row small{color:var(--muted);font-size:12px}
+.recurrence-row.inactive strong{color:var(--muted)}
+.recurrence-row.inactive .recurrence-icon{background:var(--surface-alt);color:var(--muted)}
+.recurrence-icon{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:var(--blue-soft);color:var(--blue)}
+.recurrence-actions{display:flex;align-items:center;gap:4px}
+.recurrence-toggle{display:grid;place-items:center;min-width:44px;min-height:44px}
+.recurrence-toggle input{width:20px;height:20px;cursor:pointer;accent-color:var(--blue)}
+
+/* ---------- Phone ---------- */
+@media(max-width:640px){
+ .reference-hero{grid-template-columns:1fr;gap:44px;padding:64px 20px 72px}
+ .reference-hero h1{font-size:40px;line-height:1.08}
+ .hero-lead{font-size:17px;margin-top:18px}
+ .hero-aurora{inset:-20% -40% 30% -10%;opacity:.4;-webkit-mask-image:linear-gradient(180deg,#000 30%,transparent 90%);mask-image:linear-gradient(180deg,#000 30%,transparent 90%)}
+ .hero-window{animation:none;transform:none}
+ .hero-float{right:8px;bottom:-20px}
+ .reference-actions{flex-direction:row;flex-wrap:wrap;align-items:center}
+ /* Touch targets at least 44px. */
+ .theme-shortcut,.notification-button,.logout-button,.mobile-menu-button,.mobile-close,.collapse-button{min-width:44px;min-height:44px}
+ .mobile-close{display:grid;place-items:center}
+ .demo-banner{padding:4px 16px}
+ .demo-banner button{min-height:44px}
+ .button,.agenda-presets button{min-height:44px}
+ .dialog-header>.button{min-height:44px;min-width:44px}
+ .calendar-actions .button,.pagination .button{min-height:44px;min-width:44px}
+ .view-switch button{min-height:40px;min-width:40px;justify-content:center}
+ .sort-select select{min-height:44px}
+ .search-field input{min-height:44px}
+ /* Compact KPIs so "Perlu perhatian" appears sooner. */
+ .stat-card,.stat-card+.stat-card{padding:12px 12px 14px}
+ .stat-card:nth-child(odd){padding-left:0}
+ .stat-value{font-size:30px;gap:6px}
+ .stat-card>p{margin-top:4px}
+ /* Calendar: dots instead of clipped titles; the day button's label already states the count. */
+ .calendar-day,.calendar-blank{min-height:54px;padding:6px 2px}
+ .calendar-day{align-items:center}
+ .calendar-day>div{flex-direction:row;justify-content:center;flex-wrap:wrap;gap:3px}
+ .calendar-event{width:6px;height:6px;padding:0;margin:0;border-radius:50%;background:var(--blue);text-indent:110%;white-space:nowrap;overflow:hidden}
+ .calendar-event.late{background:var(--red)}
+ .calendar-day>div>small{display:none}
+ .calendar-day>span{width:28px;height:28px;font-size:13px}
+ .activity-filters select{flex:1 1 140px}
+ .workload-chart{gap:6px}
+ .workload-label{letter-spacing:-.01em;text-align:center}
+ .workload-label i{display:none}
+ .recurrence-row{grid-template-columns:38px minmax(0,1fr)}
+ .recurrence-actions{grid-column:2;justify-content:flex-start;margin-left:-10px}
+ .dialog:not(.side-panel)[open]{animation:sheet-in var(--dur-3) var(--ease-out) both}
+}
+@media(max-width:1100px) and (min-width:641px){.reference-hero{grid-template-columns:1fr;padding:96px 40px}.hero-preview{max-width:560px}}
+
+/* Final word: reduced motion shows final states with no movement. */
+@media(prefers-reduced-motion:reduce){
+ .hero-aurora span,.hero-window,.hero-float{animation:none!important}
+ .hero-window{transform:none}
+ html.reveal-ready [data-reveal]{opacity:1;transform:none}
+}

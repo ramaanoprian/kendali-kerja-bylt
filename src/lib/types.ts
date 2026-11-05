@@ -25,7 +25,10 @@ export interface Contact extends Named {position:string;department_id:string|nul
 export interface Snapshot {tasks:Task[];attachments:Attachment[];captured_at:string;mode:'current'|'historical'}
 export interface Report {id:string;organization_id:string;title:string;start_date:string;end_date:string;version:number;mode:'current'|'historical';snapshot:Snapshot;narrative:string;created_by:string;created_at:string;filters:Record<string,string>}
 export interface Invitation {id:string;email:string;name:string;role:Role}
-export interface WorkspaceData {tasks:Task[];profiles:Profile[];memberships:Membership[];teams:Named[];departments:Named[];teamMembers:TeamMember[];supporters:Supporter[];subtasks:Subtask[];comments:Comment[];attachments:Attachment[];history:History[];notifications:Notification[];contacts:Contact[];reports:Report[];invitations:Invitation[]}
+export type Frequency='weekly'|'monthly';
+export interface Recurrence {id:string;organization_id:string;title:string;description:string;kind:Kind;priority:Priority;assigned_by:string;expected_result:string;team_id:string|null;department_id:string|null;pic_id:string|null;supporters:string[];freq:Frequency;weekday:number|null;month_day:number|null;due_days:number;due_time:string;active:boolean;next_run:string;last_run:string|null;created_by:string;created_at:string;updated_at:string}
+export const weekdays=['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'];
+export interface WorkspaceData {tasks:Task[];profiles:Profile[];memberships:Membership[];teams:Named[];departments:Named[];teamMembers:TeamMember[];supporters:Supporter[];subtasks:Subtask[];comments:Comment[];attachments:Attachment[];history:History[];notifications:Notification[];contacts:Contact[];reports:Report[];invitations:Invitation[];recurrences:Recurrence[]}
 export type Page='dashboard'|'tasks'|'agenda'|'reports'|'contacts'|'activity'|'archive'|'settings';
 export interface Filters {search:string;preset:string;team:string;member:string;department:string;kind:string;status:string;priority:string;from:string;to:string;attention:string}
 export const emptyFilters:Filters={search:'',preset:'all',team:'',member:'',department:'',kind:'',status:'',priority:'',from:'',to:'',attention:''};

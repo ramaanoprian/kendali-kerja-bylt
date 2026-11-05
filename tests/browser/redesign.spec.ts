@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
+import { settled } from './settle';
 test('status chart opens matching tasks and report shortcut preserves navigation',async({page})=>{
  await page.goto('/?preview=1');
  const status=page.getByRole('button',{name:/^Berjalan: \d+ pekerjaan$/});
@@ -17,7 +17,7 @@ test('login is responsive and accessible',async({page})=>{
  await page.setViewportSize({width:1440,height:1000});await page.goto('/');
  await expect(page.getByRole('heading',{name:'Selamat datang kembali.'})).toBeVisible();
  await page.screenshot({path:'screenshots/stripe-login-desktop.png',fullPage:true});
- const audit=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();
+ const audit=await (await settled(page)).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();
  expect(audit.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.failureSummary)}))).toEqual([]);
  await page.setViewportSize({width:390,height:844});
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
@@ -28,7 +28,7 @@ for(const mode of ['light','dark'])test(`supporting work pages retain accessible
  await page.goto('/?preview=1');
  for(const label of ['Pekerjaan','Agenda','Laporan EVP','Kontak bagian']){
   await page.locator('.main-nav').getByRole('button',{name:label,exact:true}).click();
-  const result=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();
+  const result=await (await settled(page)).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();
   expect(result.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))})),label).toEqual([]);
  }
 });

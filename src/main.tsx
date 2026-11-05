@@ -6,4 +6,5 @@ import './styles.css';
 import './styles/tokens.css';
 import './styles/stripe.css';
 import './styles/reference.css';
+import './styles/motion.css';
 createRoot(document.getElementById('root')!).render(<StrictMode><WorkspaceProvider><App/></WorkspaceProvider></StrictMode>);
