@@ -133,3 +133,19 @@ test('kanban fits five columns on a laptop screen and rows skip empty department
  await page.getByRole('button',{name:'Tampilan Kanban'}).click();
  expect(await page.locator('.kanban').evaluate(e=>e.scrollWidth<=e.clientWidth)).toBe(true);
 });
+
+test('dashboard greets, shows the week of deadlines and the user focus list',async({page})=>{
+ await page.setViewportSize({width:1366,height:768});
+ await page.goto('/?preview=1');
+ await expect(page.locator('.dashboard-greeting')).toHaveText(/^Selamat (pagi|siang|sore|malam), Pengguna\./);
+ // "Perlu perhatian" must start on the first laptop screen.
+ expect(await page.getByRole('heading',{name:/Perlu perhatian/}).evaluate(e=>e.getBoundingClientRect().top<innerHeight)).toBe(true);
+ await expect(page.locator('.week-day')).toHaveCount(7);
+ await expect(page.locator('.focus-row')).toHaveCount(2);
+ await expect(page.locator('.focus-row .due-label.late')).toHaveText('Terlambat 1 hari');
+ await expect(page.locator('.main-nav .nav-alert')).toHaveText('1');
+ await page.getByRole('button',{name:'Buka agenda'}).click();
+ await expect(page.getByRole('heading',{name:'Agenda pekerjaan'})).toBeVisible();
+ await page.locator('.main-nav').getByRole('button',{name:/Pekerjaan/}).click();
+ await expect(page.locator('td small.due-label.late')).toHaveText('Terlambat 1 hari');
+});

@@ -107,3 +107,13 @@ export function Locomotive({ scene = true, className = '' }: { scene?: boolean; 
     </svg>
   );
 }
+
+/** Compact side-view locomotive glyph for the app brand mark (inherits currentColor). */
+export function LocoMark({ size = 20 }: { size?: number }) {
+  return <svg width={size} height={size * 0.7} viewBox="0 0 30 21" fill="currentColor" aria-hidden="true" focusable="false">
+    <path d="M2 14 V8.5 Q2 7 3.5 7 H19 V4 Q19 3 20 3 H26 Q27 3 27.6 4 L29 7.5 V14 Z" />
+    <rect x="21" y="5" width="4" height="3" rx=".6" fill="#000" fillOpacity=".28" />
+    <rect x="1" y="14.5" width="29" height="1.6" rx=".8" />
+    <circle cx="6" cy="18.3" r="2.2" /><circle cx="11" cy="18.3" r="2.2" /><circle cx="20" cy="18.3" r="2.2" /><circle cx="25" cy="18.3" r="2.2" />
+  </svg>;
+}

@@ -32,3 +32,20 @@ export const fileSize=(n:number)=>n<1024*1024?`${Math.ceil(n/1024)} KB`:`${(n/10
 export const taskNumber=(n:number)=>`BYLT-${String(n).padStart(4,'0')}`;
 export const initials=(name:string)=>name.split(' ').map(x=>x[0]).slice(0,2).join('').toUpperCase();
 export const errorMessage=(e:unknown)=>{const m=e instanceof Error?e.message:typeof e==='object'&&e&&'message'in e?String(e.message):'Terjadi kesalahan.';if(m.includes('CONFLICT'))return m;if(m.includes('Failed to fetch')||m.includes('NetworkError'))return 'Koneksi terputus. Isian dipertahankan. Sambungkan kembali lalu coba simpan.';if(m.includes('Invalid login'))return 'Email atau kata sandi tidak sesuai. Periksa kembali atau pulihkan kata sandi.';if(m.includes('permission denied')||m.includes('Akses ditolak'))return 'Anda tidak memiliki izin untuk tindakan ini.';return m;};
+/** Whole calendar days (WIB) from `now` to `value`: 0 today, 1 tomorrow, -1 yesterday. */
+export const dayDiff=(value:string|Date,now:string|Date=new Date())=>Math.round((Date.parse(dateKey(value)+'T00:00:00Z')-Date.parse(dateKey(now)+'T00:00:00Z'))/86400000);
+export type DueTone='late'|'today'|'soon'|'later'|'none';
+/** Short, scannable deadline wording for lists: "Terlambat 2 hari", "Hari ini, 16.00", "Besok", "3 hari lagi". */
+export function relativeDue(t:Pick<Task,'due_at'|'status'>,now:Date=new Date()):{label:string;tone:DueTone}{
+ if(!t.due_at)return{label:'Tanpa tenggat',tone:'none'};
+ if(t.status==='done'||t.status==='cancelled')return{label:dateLabel(t.due_at),tone:'none'};
+ const d=dayDiff(t.due_at,now);
+ if(new Date(t.due_at).getTime()<now.getTime())return{label:d>=0?'Lewat tenggat hari ini':`Terlambat ${-d} hari`,tone:'late'};
+ if(d===0)return{label:`Hari ini, ${timeLabel(t.due_at)}`,tone:'today'};
+ if(d===1)return{label:'Besok',tone:'soon'};
+ if(d<=7)return{label:`${d} hari lagi`,tone:'soon'};
+ return{label:dateLabel(t.due_at),tone:'later'};
+}
+/** Greeting by WIB clock hour. */
+export const greeting=(now:Date=new Date())=>{const h=Number(new Intl.DateTimeFormat('en-GB',{hour:'2-digit',hourCycle:'h23',timeZone:'Asia/Jakarta'}).format(now));return h<11?'Selamat pagi':h<15?'Selamat siang':h<18?'Selamat sore':'Selamat malam';};
+export const longDate=(now:Date=new Date())=>new Intl.DateTimeFormat('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Jakarta'}).format(now);
