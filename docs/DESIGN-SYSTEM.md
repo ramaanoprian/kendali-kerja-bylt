@@ -94,3 +94,11 @@ Lapisan `src/styles/motion.css` diimpor paling akhir dan memuat seluruh gerak se
 - Ilustrasi `src/components/Locomotive.tsx`: siluet vektor orisinal lokomotif diesel kelas CC 205 mengikuti bentuk umumnya (kabin lebar dengan kaca depan miring dan lampu ganda di atap, hood panjang dengan pintu panel, kisi radiator belakang, peredam di belakang kabin, rangka bawah dalam, tangki BBM, dua bogie tiga gandar), tanpa logo atau livery operator, `aria-hidden`. Animasi di `src/styles/login.css`: lokomotif masuk dan mengerem dengan roda berputar, lalu idle dengan lampu depan berpendar dan asap. Reduced motion menampilkan posisi akhir tanpa gerak.
 - Jam WIB langsung, poin fitur, dan bagian informasi di bawah layar pertama: delapan fitur, pratinjau ruang kerja, tiga langkah alur kerja dengan garis progres, dan jaminan data.
 - Layar "Menyiapkan ruang kerja" memakai lokomotif yang sama.
+
+### Putaran 4: ruang kerja setelah masuk
+
+- **Header halaman ringkas** (`src/styles/workspace.css`): eyebrow disembunyikan (konteks sudah ada di breadcrumb), H1 30px. Konten mulai sekitar 85px lebih tinggi pada layar 1366×768, dan "Perlu perhatian" terlihat di layar pertama.
+- **Ringkasan:** sapaan sesuai jam WIB dan kalimat ringkasan (perlu perhatian, terlambat, tenggat 7 hari). Kartu KPI kini berikon dengan konteks: komposisi EVP/rutin, tenggat berikutnya, persentase selesai; kartu "Perlu tindak lanjut" ditandai merah bila ada yang terlambat. Ada strip **Tenggat 7 hari ke depan** dan panel **Fokus Anda** (pekerjaan aktif Anda sebagai PIC/pendukung, urut tenggat).
+- **Tenggat relatif** (`relativeDue`, `DueLabel`): "Hari ini, 16.00", "Besok", "3 hari lagi", "Terlambat 2 hari", dengan warna sesuai urgensi, di tabel, kartu HP, Kanban, Agenda, dan Ringkasan.
+- **Sidebar:** tanda merek berupa siluet lokomotif mini, nama organisasi tidak lagi dobel, dan menu Agenda menampilkan lencana merah jumlah pekerjaan terlambat.
+- **Agenda:** chip kalender berwarna sesuai status (berjalan, menunggu, belum mulai, terlambat), dengan judul lengkap di tooltip.

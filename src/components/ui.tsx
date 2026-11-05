@@ -4,7 +4,8 @@ import { X,LoaderCircle,CheckCircle2,Inbox,TriangleAlert } from 'lucide-react';
 import { useCountUp } from '../lib/motion';
 import type { Status,Priority } from '../lib/types';
 import { statuses,priorities } from '../lib/types';
-import { initials } from '../lib/domain';
+import { initials,relativeDue } from '../lib/domain';
+import type { Task } from '../lib/types';
 export function Button({variant='secondary',busy=false,children,className='',...props}:ButtonHTMLAttributes<HTMLButtonElement>&{variant?:'primary'|'secondary'|'ghost'|'danger';busy?:boolean}){return <button {...props} className={`button ${variant} ${className}`} disabled={props.disabled||busy}>{busy&&<LoaderCircle size={16} className="spin"/>}{children}</button>;}
 export function Badge({status}:{status:Status}){return <span className={`badge ${status}`}><span className="status-dot"/>{statuses[status]}</span>;}
 export function PriorityBadge({priority}:{priority:Priority}){return <span className={`priority ${priority}`}><span>{priority==='urgent'?'↑↑':priority==='high'?'↑':'−'}</span> {priorities[priority]}</span>;}
@@ -17,3 +18,5 @@ export function Toast({text,error,action,actionLabel}:{text:string;error?:boolea
 export function Skeleton(){return <div className="skeleton-page" aria-label="Memuat pekerjaan" role="status"><div className="skeleton-line wide"/><div className="skeleton-line"/><div className="skeleton-cards">{[1,2,3,4].map(x=><div key={x}/>)}</div><div className="skeleton-block"/></div>;}
 /** Number that counts up to its value. Screen readers receive only the final value. */
 export function CountUp({value,suffix=''}:{value:number;suffix?:string}){const shown=useCountUp(value);return <span className="count-up"><span aria-hidden="true">{shown}{suffix}</span><span className="sr-only">{value}{suffix}</span></span>;}
+/** Relative deadline ("Besok", "Terlambat 2 hari") coloured by urgency; full date in the tooltip. */
+export function DueLabel({task,icon}:{task:Pick<Task,'due_at'|'status'>;icon?:ReactNode}){const r=relativeDue(task);return <span className={`due-label ${r.tone}`} title={task.due_at?new Intl.DateTimeFormat('id-ID',{dateStyle:'full',timeStyle:'short',timeZone:'Asia/Jakarta'}).format(new Date(task.due_at))+' WIB':undefined}>{icon}{r.label}</span>;}
