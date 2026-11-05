@@ -61,3 +61,21 @@ Screenshot ada di `screenshots/`: login desktop/HP; ringkasan desktop/HP; tugas 
 ## Revisi komposisi sesuai referensi
 
 Komposisi final menggunakan `src/styles/reference.css` sebagai lapisan terakhir: halaman depan penuh dengan tipografi besar, grid putih bersekat, navigasi horizontal, serta formulir pada bagian akses. Gradasi, ilustrasi kartu, dan panel promosi gelap dihapus. Ruang kerja memakai metrik tanpa kartu, teks lebih besar, dan garis pemisah; panel perhatian mendahului grafik. Salinan slogan diganti dengan informasi pekerjaan yang konkret. Screenshot diperbarui dan 16 tes browser lulus setelah revisi.
+
+## Motion & polish (November 2026)
+
+Lapisan `src/styles/motion.css` diimpor paling akhir dan memuat seluruh gerak serta penyempurnaan visual. Logika gerak ada di `src/lib/motion.ts` (tanpa dependensi tambahan).
+
+| Token | Nilai | Pemakaian |
+|---|---|---|
+| `--ease-out` | `cubic-bezier(.16,1,.3,1)` | masuk halaman, daftar, progres |
+| `--ease-spring` | `cubic-bezier(.22,1.25,.36,1)` | dialog, toast, ikon aktif |
+| `--dur-1…4` | 140 / 240 / 420 / 720 ms | hover → masuk halaman |
+| `--shadow-sm/md/lg` | bayangan berlapis | tombol, kartu terangkat, dialog |
+
+- **Halaman masuk:** gradien bergerak bergaya Stripe (tiga lapisan blur yang digeser dengan `transform`), judul dengan teks gradien, dan pratinjau ruang kerja dekoratif (`aria-hidden`, tanpa angka atau identitas operasional). Bagian alur kerja dan formulir muncul saat di-scroll (`data-reveal`); tanpa JS, konten tetap terlihat.
+- **Ruang kerja:** transisi antar-halaman (fade + naik 12px), daftar masuk bertahap, angka KPI dan persentase count-up (pembaca layar menerima nilai akhir), progress dan grafik mengisi, topbar kaca menempel di atas dengan bilah tipis saat menyimpan, status cloud berdenyut saat menyimpan dan "pop" saat tersimpan, toast dengan penanda sisa waktu, skeleton berkilau, dialog spring, panel samping meluncur, dan pergantian tema cross-fade melalui View Transitions API bila tersedia.
+- **Micro-interaction:** tombol naik 1px saat hover dan mengecil saat ditekan; panah di tautan/tombol bergeser; kartu yang bisa dibuka terangkat.
+- **Reduced motion:** `prefers-reduced-motion: reduce` menampilkan keadaan akhir tanpa gerak (termasuk count-up dan reveal).
+- **Ukuran:** teks minimal 12px; target sentuh di HP minimal 44px; kalender HP memakai titik tenggat dan label jumlah pada tombol tanggal.
+- **Pengujian:** audit axe dijalankan setelah animasi berhingga selesai (`tests/browser/settle.ts`), karena warna di tengah fade bukan kontras akhir yang dilihat pengguna.

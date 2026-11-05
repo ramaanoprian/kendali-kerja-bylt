@@ -17,9 +17,18 @@ Status standar: `todo`, `doing`, `waiting`, `done`, `cancelled` atau label Indon
 
 Dedup berdasarkan SHA-256 berkas dan identitas/baris sumber. Berkas byte-identik yang diimpor ulang dilewati. Berkas yang diubah memperoleh hash baru: tinjau kemungkinan duplikasi sebelum mengimpor revisi berkas lama. Impor bukan alat pemulihan penuh database; owner/pembuat baru mengikuti transaksi impor, riwayat lama disimpan sebagai provenance nonotoritatif.
 
+## Pekerjaan berulang
+
+Pengaturan → **Pekerjaan berulang** (khusus admin). Buat jadwal mingguan (pilih hari) atau bulanan (pilih tanggal; 29–31 otomatis menjadi akhir bulan pada bulan yang lebih pendek), lalu tetapkan PIC, tim, bagian, tenggat (berapa hari setelah tugas dibuat, jam WIB), dan hasil yang diharapkan. Backend membuat tugasnya setiap hari pukul 00.05 WIB (job `bylt-recurrences`).
+
+- Setiap kemunculan hanya dibuat sekali, walaupun job berjalan ulang.
+- Bila job sempat tertunda beberapa hari, hanya kemunculan terbaru yang dibuat agar daftar tidak menumpuk.
+- PIC yang sudah dinonaktifkan tidak dipakai; tugas tetap dibuat tanpa PIC dan pengingat dikirim ke admin.
+- Menjeda atau menghapus jadwal tidak menghapus tugas yang sudah dibuat.
+
 ## Kanal notifikasi
 
-Notifikasi di dalam aplikasi: penugasan/PIC, perubahan tenggat, mention, mendekati tenggat dan terlambat. Scheduler pg_cron berjalan setiap 15 menit meskipun browser ditutup. Dedupe key menghindari pengingat berulang untuk tenggat yang sama. Preferensi menonaktifkan pengingat tenggat, bukan mention/penugasan.
+Notifikasi di dalam aplikasi: penugasan/PIC, perubahan tenggat, mention, mendekati tenggat dan terlambat. Scheduler pg_cron berjalan setiap 15 menit meskipun browser ditutup. Pengingat dikirim ke PIC dan pendukung; tugas tanpa PIC diingatkan ke semua admin aktif. "Tenggat mendekat" (≤ 24 jam) dikirim sekali per penerima, sedangkan "Tenggat terlewati" diulang sekali per hari (WIB) sampai tugas selesai atau dibatalkan. Preferensi menonaktifkan pengingat tenggat, bukan mention/penugasan.
 
 Email digunakan oleh Supabase Auth untuk undangan, tautan masuk dan pemulihan. Pengiriman/deliverability bergantung konfigurasi SMTP dan rate limit proyek. Pengingat pekerjaan melalui email/push belum tersedia. Laporan tidak dikirim otomatis ke EVP.
 
