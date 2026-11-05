@@ -1,0 +1,183 @@
+/* Sign-in page: full-viewport split layout, CC 205 locomotive scene, informative sections below.
+   The illustration panel keeps its own night palette in both themes; the form panel follows the theme. */
+.login-page{min-height:100dvh;background:var(--surface);color:var(--text)}
+.login-hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(420px,.85fr);min-height:100dvh}
+
+/* ---------- Illustration panel ---------- */
+.login-visual{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;padding:34px 56px 0;color:#eef1ff;
+ background:radial-gradient(120% 70% at 70% 105%,#3b2a7a 0%,transparent 60%),linear-gradient(165deg,#050a1c 0%,#0b1440 52%,#171455 100%)}
+.login-aurora{position:absolute;inset:-30% -20% 35% 10%;z-index:-1;pointer-events:none;opacity:.55;-webkit-mask-image:radial-gradient(closest-side,#000,transparent);mask-image:radial-gradient(closest-side,#000,transparent)}
+.login-aurora span{position:absolute;width:55%;aspect-ratio:1;border-radius:50%;filter:blur(70px);will-change:transform;animation:drift 20s var(--ease-in-out) infinite alternate}
+.login-aurora span:nth-child(1){background:#5b4bff;left:5%;top:15%}
+.login-aurora span:nth-child(2){background:#c254ff;left:40%;top:0;animation-duration:24s;animation-delay:-8s}
+.login-aurora span:nth-child(3){background:#2fa8ff;left:60%;top:30%;animation-duration:28s;animation-delay:-14s}
+.login-gridlines{position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(rgb(255 255 255/.045) 1px,transparent 1px),linear-gradient(90deg,rgb(255 255 255/.045) 1px,transparent 1px);background-size:64px 64px;-webkit-mask-image:linear-gradient(180deg,#000 0%,transparent 75%);mask-image:linear-gradient(180deg,#000 0%,transparent 75%)}
+.login-brand{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.login-wordmark{display:flex;align-items:center;gap:10px;font-size:28px;font-weight:750;letter-spacing:-1.2px;color:#fff}
+.login-wordmark:hover{text-decoration:none}
+.login-wordmark span{font-size:12px;font-weight:600;letter-spacing:1.5px;color:#aab3e6;border-left:1px solid rgb(255 255 255/.25);padding-left:10px}
+.login-clock{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;background:rgb(255 255 255/.07);border:1px solid rgb(255 255 255/.13);font-size:12px;color:#cdd3f5;font-variant-numeric:tabular-nums;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.login-clock-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 0 rgb(74 222 128/.6);animation:clock-ping 2s ease-out infinite}
+@keyframes clock-ping{0%{box-shadow:0 0 0 0 rgb(74 222 128/.55)}80%,100%{box-shadow:0 0 0 8px rgb(74 222 128/0)}}
+.login-copy{margin-top:clamp(28px,6vh,96px);max-width:660px}
+.login-org{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#a9b2ea}
+.login-visual h1{margin-top:16px;font-size:clamp(38px,4vw,62px);line-height:1.05;letter-spacing:-.035em;font-weight:650;color:#fff}
+.login-gradient{background:linear-gradient(100deg,#a99cff,#d89bff 50%,#ff9cc8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.login-lead{margin-top:18px;max-width:540px;font-size:clamp(16px,1.25vw,18px);line-height:1.6;color:#bcc4ea}
+.login-points{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:26px 0 0;padding:0}
+.login-points li{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgb(255 255 255/.06);border:1px solid rgb(255 255 255/.12);font-size:13px;color:#e2e6ff;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.login-points svg{color:#b4a8ff}
+
+/* ---------- Locomotive scene ---------- */
+.login-scene{position:relative;margin:24px -56px 0;margin-top:auto;height:clamp(170px,28vh,320px);flex-shrink:0}
+.login-scene:before{content:'';position:absolute;inset:auto -10% 6% -10%;height:75%;pointer-events:none;background:radial-gradient(ellipse at 62% 100%,rgb(255 128 186/.32),rgb(124 102 255/.16) 42%,transparent 70%)}
+.login-scene .loco{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.loco-hills{fill:#1b2266;opacity:.55}.loco-hills.near{fill:#111747;opacity:.85}
+.loco-ground{fill:#070b22}
+.loco-rail{fill:#6672c4}.loco-sleeper{fill:#1d2560}
+.loco-fill{fill:#050918}.loco-dark{fill:#02040c}
+.loco-detail{fill:#16204f}.loco-outline{fill:none;stroke:#18225a;stroke-width:1.5}
+.loco-window{fill:#ffd88a;opacity:.9;filter:drop-shadow(0 0 6px rgb(255 200 120/.65))}
+.loco-stripe{opacity:.95}
+.loco-number{fill:#aeb8ff;font-size:9.5px;font-weight:700;letter-spacing:1.2px;font-family:inherit}
+.loco-plate{fill:#141d4a;stroke:#2c3878;stroke-width:1}
+.loco-marker{fill:#ff8a7a;filter:drop-shadow(0 0 3px rgb(255 120 100/.8))}
+.loco-rail-hand{fill:none;stroke:#26306a;stroke-width:2}
+.loco-lamp{fill:#fff6d2}
+.loco-wheel-rim{fill:#02040c;stroke:#3b4789;stroke-width:2}
+.loco-wheel-hub{fill:#3b4789}
+.loco-spoke{stroke:#3b4789;stroke-width:2}
+.loco-smoke circle{fill:rgb(205 212 255/.16);filter:blur(2.5px)}
+/* Motion: the train rolls in and brakes, wheels spin with it, then it idles with headlight and exhaust. */
+.loco-train{animation:loco-enter 2.8s var(--ease-out) .25s both}
+.loco-wheel{transform-box:fill-box;transform-origin:center;animation:wheel-spin 2.8s var(--ease-out) .25s both}
+.loco-body{animation:loco-idle 1.4s ease-in-out 3.1s infinite}
+.loco-beam{opacity:0;animation:beam-on .6s ease 2.8s forwards,beam-pulse 3.2s ease-in-out 3.4s infinite}
+.loco-lamp-glow{opacity:.4;transform-box:fill-box;transform-origin:center;animation:lamp-pulse 3.2s ease-in-out 3.4s infinite}
+.loco-smoke circle{opacity:0;transform-box:fill-box;transform-origin:center;animation:puff 2.6s ease-out infinite}
+.loco-smoke circle:nth-child(2){animation-delay:.85s}.loco-smoke circle:nth-child(3){animation-delay:1.7s}
+@keyframes loco-enter{from{transform:translateX(-118%)}to{transform:none}}
+@keyframes wheel-spin{from{transform:rotate(-1620deg)}to{transform:none}}
+@keyframes loco-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-.9px)}}
+@keyframes beam-on{to{opacity:.85}}
+@keyframes beam-pulse{0%,100%{opacity:.85}50%{opacity:.55}}
+@keyframes lamp-pulse{0%,100%{opacity:.9;transform:scale(1)}50%{opacity:.55;transform:scale(.85)}}
+@keyframes puff{0%{opacity:0;transform:translate(0,0) scale(.5)}15%{opacity:.9}100%{opacity:0;transform:translate(-40px,-52px) scale(2.8)}}
+
+/* ---------- Form panel ---------- */
+.login-panel{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:76px 48px 64px;background:var(--surface)}
+.login-nav{position:absolute;top:22px;right:36px;display:flex;gap:24px}
+.login-nav a{display:flex;align-items:center;min-height:44px;font-size:13px;font-weight:550;color:var(--muted);transition:color var(--dur-1)}
+.login-nav a:hover{color:var(--text);text-decoration:none}
+.login-page .login-card{width:100%;max-width:384px;padding:0;border:0;border-radius:0;box-shadow:none;background:none}
+.login-page .login-card:before{display:none}
+.login-eyebrow{display:inline-block;font-size:12px;font-weight:650;letter-spacing:.06em;text-transform:uppercase;color:var(--blue)}
+.login-page .auth-form>h2{margin-top:8px;font-size:28px;font-weight:650;letter-spacing:-.025em;line-height:1.2}
+.login-page .auth-form>p{font-size:14px;line-height:1.6;margin-top:10px}
+.login-page .auth-form>form{margin-top:24px;gap:14px}
+.login-page .reset-link{margin-top:-8px}
+.login-page .auth-form form>.button{min-height:48px;font-size:14px;border-radius:10px}
+.login-page .magic-link-button{min-height:46px;margin-top:12px;font-size:13px;border-radius:10px}
+.login-page .input-with-icon>input{border-radius:10px}
+.login-page .auth-invitation{font-size:13px!important;line-height:1.6!important}
+.login-help{margin-top:18px;padding-top:16px;border-top:1px solid var(--line);text-align:center}
+.login-demo{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;min-height:44px;margin-top:2px;font-size:13px;font-weight:600;color:var(--blue)}
+.login-demo svg{transition:transform var(--dur-2) var(--ease-out)}
+.login-demo:hover svg{transform:translateX(3px)}
+.login-panel-foot{position:absolute;bottom:22px;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;color:var(--muted)}
+.login-scroll{position:absolute;bottom:14px;right:28px;width:40px;height:40px;border-radius:50%;border:1px solid var(--line-strong);display:grid;place-items:center;color:var(--muted);animation:bob 1.6s ease-in-out infinite alternate;transition:color var(--dur-1),border-color var(--dur-1)}
+.login-scroll:hover{color:var(--blue);border-color:var(--blue)}
+
+/* ---------- Sections below the fold ---------- */
+.login-section{max-width:1200px;margin:0 auto;padding:112px 48px;scroll-margin-top:16px}
+.login-section-head{max-width:680px}
+.login-kicker{font-size:13px;font-weight:650;letter-spacing:.06em;text-transform:uppercase;color:var(--blue)}
+.login-section h2{margin-top:14px;font-size:clamp(30px,3.2vw,42px);line-height:1.14;letter-spacing:-.03em;font-weight:620}
+.login-section-head p,.login-product-copy>p{margin-top:16px;font-size:17px;line-height:1.65;color:var(--muted)}
+.login-features{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:52px}
+/* Hover uses the independent `translate` property so it never fights the reveal transform. */
+.login-feature{padding:26px 24px;border:1px solid var(--line);border-radius:16px;background:var(--surface);translate:0 0;transition:opacity 900ms var(--ease-out) var(--reveal-delay,0ms),transform 900ms var(--ease-out) var(--reveal-delay,0ms),translate var(--dur-2) var(--ease-out),box-shadow var(--dur-2) var(--ease-out),border-color var(--dur-2)}
+.login-feature:hover{translate:0 -4px;box-shadow:var(--shadow-md);border-color:color-mix(in srgb,var(--blue) 35%,var(--line))}
+.login-feature-icon{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--blue-soft);color:var(--blue);transition:background-color var(--dur-2),color var(--dur-2),rotate var(--dur-3) var(--ease-spring)}
+.login-feature:hover .login-feature-icon{background:var(--blue);color:#fff;rotate:-6deg}
+[data-theme=dark] .login-feature:hover .login-feature-icon{color:#16112f}
+.login-feature h3{margin-top:18px;font-size:16px;font-weight:620;letter-spacing:-.01em}
+.login-feature p{margin-top:8px;font-size:14px;line-height:1.6;color:var(--muted)}
+.login-product{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:72px;align-items:center;border-top:1px solid var(--line)}
+.login-product-copy ul{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:12px}
+.login-product-copy li{display:flex;align-items:center;gap:10px;font-size:15px}
+.login-product-copy li svg{color:var(--green)}
+html.reveal-ready .login-product:not(.is-visible) :is(.hero-row,.hero-bar i,.hero-float){animation-play-state:paused}
+#alur{border-top:1px solid var(--line)}
+.login-steps{list-style:none;position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;margin:52px 0 0;padding:0}
+.login-steps:before{content:'';position:absolute;top:22px;left:22px;right:22px;height:2px;border-radius:2px;background:var(--accent-gradient);transform-origin:left center}
+html.reveal-ready .login-steps:before{transform:scaleX(0);transition:transform 1.5s var(--ease-out) .25s}
+html.reveal-ready .login-steps.is-visible:before{transform:none}
+html.reveal-ready .login-steps li{opacity:0;transform:translateY(14px);transition:opacity 700ms var(--ease-out),transform 700ms var(--ease-out);transition-delay:calc(var(--i) * 220ms + 350ms)}
+html.reveal-ready .login-steps.is-visible li{opacity:1;transform:none}
+.login-step-no{position:relative;z-index:1;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--surface);border:2px solid var(--blue);color:var(--blue);font-weight:700;font-size:14px;font-variant-numeric:tabular-nums}
+.login-steps h3{margin-top:22px;font-size:20px;font-weight:620;letter-spacing:-.015em}
+.login-steps p{margin-top:10px;font-size:15px;line-height:1.65;color:var(--muted)}
+.login-trust{max-width:1200px;margin:0 auto;padding:30px 48px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.login-trust>div{display:flex;align-items:center;gap:12px;font-size:14px;line-height:1.5;color:var(--muted)}
+.login-trust svg{flex-shrink:0;color:var(--blue)}
+.login-footer{max-width:1200px;margin:0 auto;padding:28px 48px 40px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+
+/* ---------- Loading screen uses the same locomotive ---------- */
+.initial-loading .loco{width:min(320px,80vw);height:auto;overflow:hidden}
+.initial-loading .loco-fill{fill:var(--text)}.initial-loading .loco-dark{fill:color-mix(in srgb,var(--text) 80%,#000)}
+.initial-loading .loco-detail{fill:var(--muted)}.initial-loading .loco-outline{stroke:var(--muted)}
+.initial-loading .loco-rail{fill:var(--line-strong)}.initial-loading .loco-sleeper{fill:var(--line)}
+.initial-loading .loco-wheel-rim{fill:color-mix(in srgb,var(--text) 80%,#000);stroke:var(--muted)}
+.initial-loading .loco-number,.initial-loading .loco-plate,.initial-loading .loco-marker,.initial-loading .loco-beam,.initial-loading .loco-lamp-glow,.initial-loading .loco-smoke{display:none}
+.initial-loading .loco-train{animation:loading-roll 2.4s ease-in-out infinite alternate}
+.initial-loading .loco-wheel{animation:wheel-loop .9s linear infinite}
+@keyframes loading-roll{from{transform:translateX(-6%)}to{transform:translateX(6%)}}
+@keyframes wheel-loop{to{transform:rotate(360deg)}}
+
+/* ---------- Responsive ---------- */
+@media(max-width:1180px){.login-features{grid-template-columns:repeat(2,minmax(0,1fr))}.login-trust{grid-template-columns:repeat(2,minmax(0,1fr))}.login-visual{padding:30px 40px 0}.login-scene{margin:auto -40px 0}}
+/* Short laptop screens (e.g. 1280×720): tighten vertical rhythm so the first screen still fits. */
+@media(min-width:961px) and (max-height:780px){
+ .login-panel{padding:60px 48px 52px}
+ .login-page .auth-form>h2{font-size:26px}
+ .login-page .auth-form>form{margin-top:18px;gap:12px}
+ .login-help{margin-top:14px;padding-top:12px}
+ .login-panel-foot{bottom:16px}
+ .login-copy{margin-top:clamp(20px,4vh,48px)}
+ .login-points{margin-top:20px}
+}
+@media(max-width:960px){
+ .login-hero{grid-template-columns:1fr;min-height:0}
+ .login-visual{min-height:min(720px,92dvh)}
+ .login-panel{padding:72px 40px 96px}
+ .login-product{grid-template-columns:1fr;gap:48px}
+}
+@media(max-width:640px){
+ .login-visual{min-height:0;padding:20px 20px 0}
+ .login-wordmark{font-size:24px}
+ .login-clock{order:3;width:100%;justify-content:center;padding:6px 12px}
+ .login-copy{margin-top:24px}
+ .login-org{font-size:12px}
+ .login-visual h1{font-size:32px;line-height:1.1;margin-top:12px}
+ .login-lead{font-size:15px;margin-top:12px}
+ .login-points{display:none}
+ .login-scene{margin:18px -20px 0;height:150px}
+ .login-panel{padding:30px 20px 84px}
+ .login-nav,.login-scroll{display:none}
+ .login-page .auth-form>h2{font-size:26px}
+ .login-panel-foot{padding:0 20px;text-align:center}
+ .login-section{padding:72px 20px}
+ .login-features,.login-steps,.login-trust{grid-template-columns:1fr}
+ .login-features{margin-top:36px}
+ .login-steps{gap:28px}
+ .login-steps:before{display:none}
+ .login-trust{padding:24px 20px;gap:16px}
+ .login-footer{padding:24px 20px 36px;flex-direction:column;gap:6px}
+}
+@media(prefers-reduced-motion:reduce){
+ .login-aurora span,.loco-train,.loco-wheel,.loco-body,.loco-smoke circle,.loco-lamp-glow,.login-clock-dot,.login-scroll{animation:none!important}
+ .loco-beam{animation:none!important;opacity:.8}
+ .loco-smoke{display:none}
+ html.reveal-ready .login-steps:before,html.reveal-ready .login-steps li{transform:none;opacity:1}
+}

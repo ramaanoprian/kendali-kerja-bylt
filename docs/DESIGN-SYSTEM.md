@@ -87,3 +87,10 @@ Lapisan `src/styles/motion.css` diimpor paling akhir dan memuat seluruh gerak se
 - **Kanban:** lima kolom muat pada layar laptop 1366px; di layar sempit kolom menempel (scroll-snap) saat digeser.
 - **Tabel pekerjaan:** nama Bagian hanya tampil bila sudah ditetapkan.
 - **Mode contoh:** memuat bagian, kontak, dan notifikasi contoh agar seluruh halaman dapat ditinjau.
+
+### Putaran 3: halaman masuk layar penuh
+
+- Layar pertama mengisi seluruh viewport laptop (diuji 1280×720, 1366×768, 1440×900): panel ilustrasi malam di kiri dan formulir tanpa bingkai di kanan, sehingga formulir terlihat tanpa scroll.
+- Ilustrasi `src/components/Locomotive.tsx`: siluet vektor orisinal lokomotif diesel kelas CC 205 mengikuti bentuk umumnya (kabin lebar dengan kaca depan miring dan lampu ganda di atap, hood panjang dengan pintu panel, kisi radiator belakang, peredam di belakang kabin, rangka bawah dalam, tangki BBM, dua bogie tiga gandar), tanpa logo atau livery operator, `aria-hidden`. Animasi di `src/styles/login.css`: lokomotif masuk dan mengerem dengan roda berputar, lalu idle dengan lampu depan berpendar dan asap. Reduced motion menampilkan posisi akhir tanpa gerak.
+- Jam WIB langsung, poin fitur, dan bagian informasi di bawah layar pertama: delapan fitur, pratinjau ruang kerja, tiga langkah alur kerja dengan garis progres, dan jaminan data.
+- Layar "Menyiapkan ruang kerja" memakai lokomotif yang sama.

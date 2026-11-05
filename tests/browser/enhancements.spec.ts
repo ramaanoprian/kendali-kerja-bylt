@@ -4,10 +4,9 @@ const axe=async(page:import('@playwright/test').Page)=>(await (await settled(pag
 
 test('login copy, password toggle and single preview entry',async({page})=>{
  await page.goto('/');
- await expect(page.locator('.reference-access-intro h2')).toHaveText('Masuk ke ruang kerja.');
- await page.setViewportSize({width:390,height:844});
- // The line break is hidden on phones; the words must still be separated.
- expect(await page.locator('.reference-access-intro h2').evaluate(e=>(e as HTMLElement).innerText.replace(/\s+/g,' ').trim())).toBe('Masuk ke ruang kerja.');
+ await expect(page.getByRole('heading',{level:1})).toHaveText('Pengelolaan pekerjaan Tim Kerja BYLT.');
+ await expect(page.getByRole('heading',{name:'Selamat datang kembali.'})).toBeVisible();
+ await expect(page.locator('.login-clock')).toContainText('WIB');
  const password=page.getByLabel('Kata sandi',{exact:true});
  await expect(password).toHaveAttribute('type','password');
  await page.getByRole('button',{name:'Tampilkan kata sandi'}).click();
@@ -16,6 +15,25 @@ test('login copy, password toggle and single preview entry',async({page})=>{
  await expect(password).toHaveAttribute('type','password');
  await expect(page.getByLabel('Email',{exact:true})).toHaveAttribute('placeholder','nama@email.com');
  await expect(page.getByRole('button',{name:/pratinjau|data contoh/i})).toHaveCount(1);
+});
+
+test('sign-in fills a laptop screen with the form fully visible',async({page})=>{
+ for(const [width,height] of [[1366,768],[1440,900],[1280,720]]){
+  await page.setViewportSize({width,height});
+  await page.goto('/');
+  await page.locator('.login-card').waitFor();
+  const layout=await page.evaluate(()=>{const hero=document.querySelector('.login-hero')!.getBoundingClientRect(),form=document.querySelector('.login-card')!.getBoundingClientRect(),scene=document.querySelector('.login-scene')!.getBoundingClientRect();return{hero:Math.round(hero.height),form:Math.round(form.bottom),scene:Math.round(scene.bottom),vh:innerHeight,overflow:document.documentElement.scrollWidth>innerWidth};});
+  expect(layout.hero,`${width}x${height}`).toBe(height);
+  expect(layout.form,`${width}x${height}`).toBeLessThanOrEqual(height);
+  expect(layout.scene,`${width}x${height}`).toBeLessThanOrEqual(height);
+  expect(layout.overflow).toBe(false);
+ }
+ // The decorative locomotive stays out of the accessibility tree.
+ await expect(page.locator('.login-scene svg')).toHaveAttribute('aria-hidden','true');
+ await page.setViewportSize({width:390,height:844});
+ await page.goto('/');
+ await page.locator('.login-card').waitFor();
+ expect(await page.getByLabel('Email',{exact:true}).evaluate(e=>e.getBoundingClientRect().bottom<=innerHeight)).toBe(true);
 });
 
 test('count-up settles on the real values',async({page})=>{
