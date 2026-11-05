@@ -1,0 +1,9 @@
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App';
+import { WorkspaceProvider } from './lib/workspace';
+import './styles.css';
+import './styles/tokens.css';
+import './styles/stripe.css';
+import './styles/reference.css';
+createRoot(document.getElementById('root')!).render(<StrictMode><WorkspaceProvider><App/></WorkspaceProvider></StrictMode>);

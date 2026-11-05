@@ -1,0 +1,26 @@
+/* Authoritative theme tokens. Stripe-inspired, with BYLT identity. */
+:root{
+ --bg:#f6f8fb;--surface:#ffffff;--surface-alt:#f7f9fc;--sidebar:#fbfcfe;
+ --text:#182b49;--muted:#56657d;--faint:#64738a;--line:#e3e8f0;--line-strong:#c9d2df;
+ --blue:#5840d8;--blue-hover:#4830c0;--blue-soft:#eeeafb;
+ --orange:#8c530c;--orange-soft:#fff3db;--red:#b52d45;--red-soft:#fff0f2;
+ --green:#17724c;--green-soft:#e6f7ee;
+ --radius-sm:6px;--radius:10px;--radius-lg:14px;
+ --shadow:0 2px 5px #20304d04,0 0 0 1px #20304d02;
+ --shadow-float:0 8px 24px #13274913,0 30px 80px #13274918;
+ --motion:180ms;--sidebar-width:230px;
+ --accent-gradient:linear-gradient(110deg,#635bff,#a277ef 48%,#f4accc);
+ --ink:#102c4e;--on-ink:#f6f9ff;--focus-ring:0 0 0 3px #635bff33;
+ --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;--space-6:24px;--space-8:32px;
+ --layer-sidebar:30;--layer-toast:100;
+ color:var(--text);background:var(--bg);color-scheme:light;
+}
+:root[data-theme=dark]{
+ --bg:#111726;--surface:#192234;--surface-alt:#1e2a3d;--sidebar:#141c2d;
+ --text:#edf2fc;--muted:#b0bdd0;--faint:#a2b1c9;--line:#2c3a50;--line-strong:#4e607b;
+ --blue:#b4a7ff;--blue-hover:#cbbfff;--blue-soft:#302953;
+ --orange:#f5c67d;--orange-soft:#3d3021;--red:#ffa2af;--red-soft:#442833;
+ --green:#83e1b3;--green-soft:#1a3934;
+ --shadow:0 2px 7px #00000012;--shadow-float:0 24px 80px #0007;
+ --ink:#0d1a2e;--focus-ring:0 0 0 3px #b4a7ff40;color-scheme:dark;
+}

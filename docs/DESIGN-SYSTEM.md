@@ -1,0 +1,63 @@
+# Design system Kendali Kerja BYLT
+
+## Arah desain dan referensi
+
+Versi ini mengikuti arahan pemilik untuk UI/UX yang terinspirasi Stripe. Referensi Figma yang dibaca melalui konektor resmi: https://www.figma.com/design/D8BQjTo3kpz495YjzJkMQG/Untitled?node-id=1-3080. Halaman 0:1 memuat frame situs Stripe 1:3002; hero 1:3080 ditinjau melalui screenshot. Referensi langsung: https://stripe.com/, https://stripe.com/payments, dan https://docs.stripe.com/dashboard.
+
+Tipografi besar, bidang warna diagonal, grid, teks navy, aksi ungu, garis halus, dan permukaan data yang terstruktur diadaptasi untuk pekerjaan BYLT. Identitas, bahasa, data, serta alur kerja tetap BYLT. Logo, ilustrasi komersial, font berlisensi, dan angka bisnis Stripe tidak dipakai.
+
+## Struktur style
+
+- `src/styles.css`: fondasi layout dan komponen aplikasi.
+- `src/styles/tokens.css`: sumber token tema yang berlaku, diimpor sesudah fondasi.
+- `src/styles/stripe.css`: tampilan komponen dan layout desktop/tablet/HP, diimpor terakhir.
+
+| Kelompok | Token / nilai terang |
+|---|---|
+| Latar | `--bg: #f6f8fb`, `--surface: #ffffff`, `--surface-alt: #f7f9fc` |
+| Teks | `--text: #182b49`, `--muted: #56657d`, `--faint: #64738a` |
+| Aksi | `--blue: #5840d8`, `--blue-hover: #4830c0`, `--blue-soft: #eeeafb` |
+| Semantik | hijau sukses, amber peringatan, merah bahaya, masing-masing dengan latar soft |
+| Identitas | ungu utama; titik oranye kecil pada simbol BYLT |
+| Font | `-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif` |
+| Ukuran | judul 27–30 px; login 36–66 px; bagian 16–18 px; isi 13–16 px; metadata lebih kecil sesuai ruang |
+| Spacing | 4, 8, 12, 16, 20, 24, 32 px; margin desktop 36–48 px; HP 18 px |
+| Radius | `--radius-sm: 6px`, `--radius: 10px`, `--radius-lg: 14px` |
+| Border | `--line: #e3e8f0`, `--line-strong: #c9d2df` |
+| Elevasi | `--shadow` permukaan, `--shadow-float` dialog; shadow halus |
+| Motion | 180 ms; reduced-motion menghentikan animasi; rail tidak beranimasi saat viewport berubah |
+| Layer | sidebar 30; tab HP 35; menu 45; toast 100; native dialog top layer |
+
+Tema gelap mengganti semua token semantik dan permukaan. Tombol ungu pada gelap memakai warna yang memenuhi kontras teks putih. Ikon menggunakan Lucide. Angka grafik, progres, timestamp, dan tabel memakai tabular numerals.
+
+## Alur dan komponen
+
+`Button`: primary, secondary, ghost, danger. Kondisi hover, focus-visible, pressed, disabled, dan busy. Ikon tanpa teks memiliki aria-label. Kontrol sentuh utama minimal 44 px.
+
+`Field`: label permanen, input/textarea/select native, pesan error dekat input, aria-invalid dan aria-describedby. Date/time, checkbox, dan range tetap memakai kontrol native. Pemilih anggota memakai select/checklist native.
+
+`Badge`, `PriorityBadge`, `Avatar`, `Progress`: status memakai teks dan penanda selain warna. Progress menyediakan nilai untuk screen reader.
+
+`WorkloadChart`: distribusi lima status dari tugas sesuai filter. Setiap kolom adalah tombol berlabel status dan jumlah, dapat digunakan dengan keyboard, serta membuka daftar yang sesuai. Grafik bukan tren historis. Tidak ada data grafik simulasi di luar mode contoh.
+
+`Modal`: native dialog, fokus terkurung, Escape, dan pengembalian fokus. Center, wide, side panel; detail tugas penuh pada HP; filter memakai sheet. Draft dan penanganan konflik tetap menggunakan alur data yang sama.
+
+`Filters`: preset dengan aria-pressed, pencarian, advanced filter, dan chip yang dapat dihapus. Preset memakai garis bawah aktif. Tabel/Kanban memiliki aria-pressed. Sidebar menyatakan halaman aktif lewat aria-current. Pencarian global mendukung Ctrl/Cmd+K.
+
+Ringkasan: metrik dapat diklik; peta status; tugas perlu perhatian; tugas berjalan; aktivitas; komposisi hasil; distribusi anggota/tim; pintasan laporan. Pada HP, panel perlu perhatian didahulukan. Semua nilai berasal dari data ruang kerja dan mengikuti filter yang relevan.
+
+Navigasi desktop menggunakan sidebar yang bisa diciutkan. Tablet memulai dengan rail ringkas saat dibuka langsung dan dapat diperluas; HP memakai lima tab berlabel serta menu tambahan. Pergantian tema tersedia pada toolbar dan Pengaturan, termasuk mengikuti sistem.
+
+Login mengutamakan formulir, akses email/password, tautan email, pemulihan, dan penjelasan undangan. Ilustrasi alur pada desktop bersifat dekoratif, tidak menampilkan angka atau identitas operasional palsu. Versi HP menyederhanakan ilustrasi.
+
+Loading, empty, error, offline, konflik, dan akses ditolak memakai komponen feedback yang sama. Sukses penyimpanan tetap memerlukan konfirmasi server; desain tidak mengubah autentikasi, izin, atau sinkronisasi.
+
+## Verifikasi dan screenshot
+
+Playwright menguji alur tugas, koordinasi, laporan, filter, kalender, navigasi, tema, fokus dialog, draft offline, dan URL Auth. Axe dijalankan pada ringkasan, pekerjaan, agenda, laporan, kontak untuk light/dark, serta login. Audit otomatis bukan jaminan kepatuhan WCAG menyeluruh atau pengganti uji pembaca layar manual.
+
+Screenshot ada di `screenshots/`: login desktop/HP; ringkasan desktop/HP; tugas HP/tablet; tema gelap. Screenshot ruang kerja menggunakan mode contoh yang berlabel dan tidak menulis data ke database operasional.
+
+## Revisi komposisi sesuai referensi
+
+Komposisi final menggunakan `src/styles/reference.css` sebagai lapisan terakhir: halaman depan penuh dengan tipografi besar, grid putih bersekat, navigasi horizontal, serta formulir pada bagian akses. Gradasi, ilustrasi kartu, dan panel promosi gelap dihapus. Ruang kerja memakai metrik tanpa kartu, teks lebih besar, dan garis pemisah; panel perhatian mendahului grafik. Salinan slogan diganti dengan informasi pekerjaan yang konkret. Screenshot diperbarui dan 16 tes browser lulus setelah revisi.

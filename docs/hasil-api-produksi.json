@@ -1,0 +1,45 @@
+{
+  "at": "2026-10-31T04:48:04.701Z",
+  "results": [
+    {
+      "check": "Anonymous SELECT bylt_tasks",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "check": "Anonymous SELECT bylt_memberships",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "check": "Anonymous SELECT bylt_history",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "check": "Anonymous SELECT bylt_reports",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "check": "Anonymous SELECT bylt_contacts",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "check": "Unauthenticated bylt-admin",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "check": "Unauthenticated bylt-bootstrap",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "check": "Private bucket has no public download",
+      "status": 400,
+      "passed": true
+    }
+  ]
+}
