@@ -39,7 +39,9 @@
 .loco-detail{fill:#16204f}.loco-outline{fill:none;stroke:#18225a;stroke-width:1.5}
 .loco-window{fill:#ffd88a;opacity:.9;filter:drop-shadow(0 0 6px rgb(255 200 120/.65))}
 .loco-stripe{opacity:.95}
-.loco-number{fill:#9aa6ff;font-size:15px;font-weight:650;letter-spacing:3px;font-family:inherit}
+.loco-number{fill:#aeb8ff;font-size:9.5px;font-weight:700;letter-spacing:1.2px;font-family:inherit}
+.loco-plate{fill:#141d4a;stroke:#2c3878;stroke-width:1}
+.loco-marker{fill:#ff8a7a;filter:drop-shadow(0 0 3px rgb(255 120 100/.8))}
 .loco-rail-hand{fill:none;stroke:#26306a;stroke-width:2}
 .loco-lamp{fill:#fff6d2}
 .loco-wheel-rim{fill:#02040c;stroke:#3b4789;stroke-width:2}
@@ -127,7 +129,7 @@ html.reveal-ready .login-steps.is-visible li{opacity:1;transform:none}
 .initial-loading .loco-detail{fill:var(--muted)}.initial-loading .loco-outline{stroke:var(--muted)}
 .initial-loading .loco-rail{fill:var(--line-strong)}.initial-loading .loco-sleeper{fill:var(--line)}
 .initial-loading .loco-wheel-rim{fill:color-mix(in srgb,var(--text) 80%,#000);stroke:var(--muted)}
-.initial-loading .loco-number,.initial-loading .loco-beam,.initial-loading .loco-lamp-glow,.initial-loading .loco-smoke{display:none}
+.initial-loading .loco-number,.initial-loading .loco-plate,.initial-loading .loco-marker,.initial-loading .loco-beam,.initial-loading .loco-lamp-glow,.initial-loading .loco-smoke{display:none}
 .initial-loading .loco-train{animation:loading-roll 2.4s ease-in-out infinite alternate}
 .initial-loading .loco-wheel{animation:wheel-loop .9s linear infinite}
 @keyframes loading-roll{from{transform:translateX(-6%)}to{transform:translateX(6%)}}

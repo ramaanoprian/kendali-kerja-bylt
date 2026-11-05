@@ -1,12 +1,14 @@
 /**
- * Original vector silhouette of a CC 205-class diesel locomotive (long-hood road switcher, two C-C bogies).
- * Decorative only: always aria-hidden. No operator logos or liveries.
- * Motion lives in CSS (login.css): entrance, wheel spin, idle bounce, headlight pulse, exhaust.
+ * Original vector silhouette of a CC 205-class diesel locomotive, drawn from its general form:
+ * full-width cab with raked windscreen and twin roof headlights, long hood with panel doors,
+ * rear radiator grille, dynamic-brake grille behind the cab, roof silencer, deep underframe,
+ * fuel tank, and two three-axle (C-C) bogies. Decorative only: always aria-hidden.
+ * No operator logos or liveries. Motion lives in CSS (login.css).
  */
-const wheelX = [120, 160, 200, 500, 540, 580];
-const stanchions = Array.from({ length: 18 }, (_, i) => 74 + i * 32);
-const louvers = Array.from({ length: 13 }, (_, i) => 96 + i * 8);
-const doors = [224, 272, 320, 368, 416];
+const wheelX = [92, 138, 184, 500, 546, 592];
+const doors = Array.from({ length: 9 }, (_, i) => 140 + i * 26);
+const radiator = Array.from({ length: 11 }, (_, i) => 62 + i * 6);
+const dbGrille = Array.from({ length: 7 }, (_, i) => 78 + i * 3);
 const sleepers = Array.from({ length: 110 }, (_, i) => -1070 + i * 26);
 
 export function Locomotive({ scene = true, className = '' }: { scene?: boolean; className?: string }) {
@@ -41,48 +43,66 @@ export function Locomotive({ scene = true, className = '' }: { scene?: boolean; 
       </g>
 
       <g className="loco-train">
-        <polygon className="loco-beam" points="648,98 760,58 760,140" fill="url(#loco-beam)" />
+        <polygon className="loco-beam" points="654,62 790,20 790,112" fill="url(#loco-beam)" />
         <g className="loco-body">
-          {/* pilots and couplers */}
-          <path className="loco-dark" d="M60 152 H30 L22 184 H60 Z M640 152 H670 L678 184 H640 Z" />
-          <rect className="loco-dark" x="10" y="160" width="16" height="8" rx="2" />
-          <rect className="loco-dark" x="674" y="160" width="16" height="8" rx="2" />
-          {/* underframe, fuel tank */}
-          <rect className="loco-fill" x="58" y="138" width="584" height="14" rx="2" />
-          <rect className="loco-dark" x="252" y="152" width="196" height="20" rx="9" />
-          <rect className="loco-detail" x="266" y="158" width="168" height="2" rx="1" />
-          {/* long hood */}
-          <path className="loco-fill" d="M80 140 V86 Q80 78 88 78 H462 Q470 78 470 86 V140 Z" />
-          <rect className="loco-fill" x="92" y="70" width="112" height="10" rx="3" />
-          <rect className="loco-fill" x="330" y="64" width="18" height="16" rx="2" />
-          {louvers.map(x => <rect key={x} className="loco-detail" x={x} y="90" width="3" height="38" rx="1" />)}
-          {doors.map(x => <rect key={x} className="loco-outline" x={x} y="90" width="40" height="40" rx="2" />)}
-          {/* cab and short nose */}
-          <path className="loco-fill" d="M470 140 V60 Q470 48 482 48 H568 Q580 48 580 60 V140 Z" />
-          <path className="loco-fill" d="M580 140 V88 H630 Q642 88 644 100 L648 140 Z" />
-          <rect className="loco-window" x="486" y="62" width="34" height="28" rx="3" />
-          <rect className="loco-window" x="530" y="62" width="36" height="28" rx="3" />
-          <rect className="loco-outline" x="530" y="96" width="36" height="40" rx="2" />
+          {/* pilots (plough) and couplers */}
+          <path className="loco-dark" d="M40 146 H22 L16 178 H40 Z M654 146 H684 L692 178 H654 Z" />
+          <rect className="loco-dark" x="4" y="152" width="16" height="9" rx="2" />
+          <rect className="loco-dark" x="688" y="152" width="18" height="9" rx="2" />
+          {/* deep underframe */}
+          <rect className="loco-fill" x="36" y="130" width="640" height="18" rx="2" />
+          <rect className="loco-detail" x="40" y="139" width="632" height="2" rx="1" />
+          {/* fuel tank between the bogies */}
+          <path className="loco-dark" d="M230 148 H424 V160 Q424 172 412 172 H242 Q230 172 230 160 Z" />
+          <rect className="loco-detail" x="244" y="155" width="166" height="2" rx="1" />
+          {/* long hood: lower roof at the radiator end, rising toward the cab */}
+          <path className="loco-fill" d="M48 130 V84 Q48 76 56 75 L132 66 H462 Q472 66 472 74 V130 Z" />
+          {/* roof: radiator fan humps, silencer, dynamic-brake housing */}
+          <path className="loco-fill" d="M62 73 Q76 63 92 63 Q108 63 122 70 Z" />
+          <rect className="loco-fill" x="404" y="56" width="50" height="13" rx="6.5" />
+          <rect className="loco-fill" x="220" y="62" width="120" height="6" rx="3" />
+          {/* rear radiator grille, panel doors, dynamic-brake side grille */}
+          {radiator.map(x => <rect key={x} className="loco-detail" x={x} y="82" width="2.5" height="32" rx="1" />)}
+          {doors.map(x => <path key={x} className="loco-outline" d={`M${x} 76 V126`} />)}
+          {dbGrille.map(y => <rect key={y} className="loco-detail" x="380" y={y} width="84" height="1.6" rx=".8" />)}
+          {/* full-width cab with raked windscreen */}
+          <path className="loco-fill" d="M472 130 V62 Q472 52 482 52 H626 Q636 52 641 60 L656 84 L658 130 Z" />
+          {/* twin headlight housing on the cab roof front */}
+          <rect className="loco-fill" x="628" y="44" width="22" height="12" rx="5" />
+          <rect className="loco-window" x="488" y="64" width="30" height="34" rx="3" />
+          <rect className="loco-window" x="522" y="64" width="30" height="34" rx="3" />
+          <path className="loco-window" d="M598 64 H626 L640 86 H598 Z" />
+          <rect className="loco-outline" x="590" y="62" width="54" height="66" rx="3" />
+          {/* number plate on the cab side */}
+          <rect className="loco-plate" x="488" y="104" width="64" height="14" rx="2" />
+          <text className="loco-number" x="520" y="115" textAnchor="middle">CC 205</text>
+          {/* front end: step, marker lights */}
+          <rect className="loco-fill" x="650" y="112" width="26" height="22" rx="2" />
+          <circle className="loco-marker" cx="664" cy="122" r="2.4" />
           {/* livery stripe and rim light */}
-          <rect x="80" y="124" width="568" height="5" fill="url(#loco-stripe)" className="loco-stripe" />
-          <path d="M88 78 H462 M482 48 H568" stroke="url(#loco-rim)" strokeWidth="2" strokeLinecap="round" fill="none" />
-          <text className="loco-number" x="300" y="116">CC 205</text>
-          {/* handrail */}
-          <path className="loco-rail-hand" d={`M66 118 H634 ${stanchions.map(x => `M${x} 118 V138`).join(' ')}`} />
-          {/* headlight */}
-          <circle className="loco-lamp-glow" cx="645" cy="98" r="14" fill="url(#loco-lamp)" />
-          <circle className="loco-lamp" cx="645" cy="98" r="4" />
-          {/* bogie frames */}
-          <rect className="loco-dark" x="98" y="158" width="124" height="22" rx="5" />
-          <rect className="loco-dark" x="478" y="158" width="124" height="22" rx="5" />
+          <rect x="48" y="118" width="610" height="4" fill="url(#loco-stripe)" className="loco-stripe" />
+          <path d="M56 75 L132 66 H462 M482 52 H626" stroke="url(#loco-rim)" strokeWidth="2" strokeLinecap="round" fill="none" />
+          {/* handrails beside the cab and at the front */}
+          <path className="loco-rail-hand" d="M374 102 H468 M378 102 V130 M422 102 V130 M466 102 V130 M662 96 V112 M676 96 V112 M662 96 H676" />
+          {/* headlights */}
+          <circle className="loco-lamp-glow" cx="650" cy="50" r="16" fill="url(#loco-lamp)" />
+          <circle className="loco-lamp" cx="646" cy="50" r="3.4" />
+          <circle className="loco-lamp" cx="654" cy="50" r="3.4" />
+          {/* bogie side frames with springs and brake cylinders */}
+          {[72, 480].map(x => <g key={x}>
+            <path className="loco-dark" d={`M${x} 154 H${x + 136} Q${x + 142} 154 ${x + 142} 160 V176 Q${x + 142} 182 ${x + 136} 182 H${x + 6} Q${x} 182 ${x} 176 Z`} />
+            <rect className="loco-detail" x={x + 34} y="146" width="10" height="10" rx="2" />
+            <rect className="loco-detail" x={x + 80} y="146" width="10" height="10" rx="2" />
+            <rect className="loco-detail" x={x + 8} y="160" width="126" height="2" rx="1" />
+          </g>)}
         </g>
         {/* Position on the outer group, rotation (CSS) on the inner one: CSS transform replaces the attribute. */}
-        {wheelX.map(x => <g key={x} transform={`translate(${x} 175)`}><g className="loco-wheel">
-          <circle className="loco-wheel-rim" r="15" />
-          <circle className="loco-wheel-hub" r="5" />
-          <path className="loco-spoke" d="M0 -12 V12 M-12 0 H12" />
+        {wheelX.map(x => <g key={x} transform={`translate(${x} 171)`}><g className="loco-wheel">
+          <circle className="loco-wheel-rim" r="17" />
+          <circle className="loco-wheel-hub" r="5.5" />
+          <path className="loco-spoke" d="M0 -14 V14 M-14 0 H14" />
         </g></g>)}
-        <g className="loco-smoke"><circle cx="339" cy="58" r="7" /><circle cx="339" cy="58" r="7" /><circle cx="339" cy="58" r="7" /></g>
+        <g className="loco-smoke"><circle cx="429" cy="52" r="7" /><circle cx="429" cy="52" r="7" /><circle cx="429" cy="52" r="7" /></g>
       </g>
     </svg>
   );
